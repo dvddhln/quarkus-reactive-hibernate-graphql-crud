@@ -1,5 +1,6 @@
 package boundary;
 
+import control.exception.AlreadyExistingException;
 import entity.ActorMovieEntity;
 import entity.Movie;
 import entity.dto.ActorDTO;
@@ -58,7 +59,8 @@ public class MovieResource {
     @Mutation
     @Description("Add actor to movie")
     public Uni<MovieDTO> addActorToMovie(@Name("movieId") long movieId, @Name("actorId") long actorId) {
-        return Movie.addActorToMovie(movieId, actorId).onItem().transform(MovieDTO::from);
+        return Movie.addActorToMovie(movieId, actorId).onItem().transform(MovieDTO::from).onFailure().
+                transform(throwable -> new AlreadyExistingException("movieId: " + movieId + " and actorId: " + actorId));
     }
 
 }

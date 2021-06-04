@@ -26,3 +26,7 @@ quarkus:
 #      sql-load-script: no-file
 #      database:
 #        generation: none
+mp:
+  graphql:
+    showErrorMessage:
+      - control.exception.AlreadyExistingException  

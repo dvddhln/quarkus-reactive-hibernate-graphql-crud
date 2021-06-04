@@ -6,6 +6,10 @@ and mutated accordingly.
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
+This project is presented in the following article.
+
+[Creating a CRUD app with Quarkus, Reactive Hibernate, Panache and GraphQL using a PostgreSQL database](https://dvddhln.medium.com/creating-a-crud-app-with-quarkus-reactive-hibernate-panache-and-graphql-using-a-postgresql-216ecd75ee52)
+
 
 ###  Run Postgres docker container
 

@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.json.bind.annotation.JsonbDateFormat;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,8 +34,6 @@ public class Movie extends PanacheEntityBase {
 
     public String title;
     public String director;
-
-    @JsonbDateFormat("yyyy-MM-dd")
     public LocalDate releaseDate;
 
 
@@ -82,9 +79,6 @@ public class Movie extends PanacheEntityBase {
         return Panache.withTransaction(() -> deleteById(id));
     }
 
-    public String toString() {
-        return this.getClass().getSimpleName() + "<" + this.id + ">";
-    }
 
     public static Uni<Movie> addActorToMovie(Long movieId, Long actorId) {
 
@@ -110,5 +104,9 @@ public class Movie extends PanacheEntityBase {
                         .onItem().call(actorMovieEntity -> actorMovieEntity.persist())
                         .onItem().transform(actorMovieEntity -> actorMovieEntity.movie));
 
+    }
+
+    public String toString() {
+        return this.getClass().getSimpleName() + "<" + this.id + ">";
     }
 }

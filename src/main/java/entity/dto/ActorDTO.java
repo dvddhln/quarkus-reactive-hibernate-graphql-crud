@@ -13,13 +13,12 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Name("Actor")
+@Name("ActorResponse")
 public class ActorDTO {
 
     public String name;
     public Long id;
-
-
+    
     public static ActorDTO from(Actor actor) {
         return ActorDTO
                 .builder()
@@ -29,11 +28,8 @@ public class ActorDTO {
     }
 
     public static List<ActorDTO> from(List<Actor> actor) {
-        return actor.stream().map(actr -> ActorDTO
-                .builder()
-                .name(actr.name)
-                .id(actr.id)
-                .build()).collect(Collectors.toList());
+        return actor.stream().map(ActorDTO::from)
+                .collect(Collectors.toList());
 
     }
 }

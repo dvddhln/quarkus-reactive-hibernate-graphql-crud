@@ -3,6 +3,7 @@ package boundary;
 import entity.ActorMovieEntity;
 import entity.Movie;
 import entity.dto.ActorDTO;
+import entity.dto.MovieDTO;
 import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.graphql.Description;
 import org.eclipse.microprofile.graphql.GraphQLApi;
@@ -18,18 +19,18 @@ public class MovieResource {
 
     @Query("allMovies")
     @Description("Get all Movies")
-    public Uni<List<Movie>> getAllMovies() {
-        return Movie.getAllMovies();
+    public Uni<List<MovieDTO>> getAllMovies() {
+        return Movie.getAllMovies().onItem().transform(MovieDTO::from);
     }
 
     @Query
     @Description("Get a movie")
-    public Uni<Movie> getMovie(@Name("movieId") long id) {
-        return Movie.findByMovieId(id);
+    public Uni<MovieDTO> getMovie(@Name("movieId") long id) {
+        return Movie.findByMovieId(id).onItem().transform(MovieDTO::from);
     }
 
-    public Uni<List<ActorDTO>> actors(@Source Movie movie) {
-        return ActorMovieEntity.getActorsByMovieQuery(movie)
+    public Uni<List<ActorDTO>> actors(@Source(name = "MovieResponse") MovieDTO movie) {
+        return ActorMovieEntity.getActorsByMovieQuery(movie.id)
                 .onItem()
                 .transform(actorMovieEntity ->
                         ActorDTO.from(actorMovieEntity.actor))
@@ -38,14 +39,14 @@ public class MovieResource {
 
     @Mutation
     @Description("Create a movie")
-    public Uni<Movie> createMovie(Movie movie) {
-        return Movie.addMovie(movie);
+    public Uni<MovieDTO> createMovie(Movie movie) {
+        return Movie.addMovie(movie).onItem().transform(MovieDTO::from);
     }
 
     @Mutation
     @Description("Update a movie")
-    public Uni<Movie> updateMovie(@Name("movieId") long id, Movie movie) {
-        return Movie.updateMovie(id, movie);
+    public Uni<MovieDTO> updateMovie(@Name("movieId") long id, Movie movie) {
+        return Movie.updateMovie(id, movie).onItem().transform(MovieDTO::from);
     }
 
     @Mutation
@@ -56,8 +57,8 @@ public class MovieResource {
 
     @Mutation
     @Description("Add actor to movie")
-    public Uni<Movie> addActorToMovie(@Name("movieId") long movieId, @Name("actorId") long actorId) {
-        return Movie.addActorToMovie(movieId, actorId);
+    public Uni<MovieDTO> addActorToMovie(@Name("movieId") long movieId, @Name("actorId") long actorId) {
+        return Movie.addActorToMovie(movieId, actorId).onItem().transform(MovieDTO::from);
     }
 
 }

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,7 +31,6 @@ import javax.persistence.UniqueConstraint;
 @Table(indexes = {
         @Index(name = "movie_id_index", columnList = "movie_id"),
         @Index(name = "actor_id_index", columnList = "actor_id"),
-        @Index(name = "movie_actor_index_index", columnList = "movie_id, actor_id"),
 },
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"movie_id", "actor_id"})
@@ -49,22 +47,16 @@ public class ActorMovieEntity extends PanacheEntityBase {
     public Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JsonbTransient
     @OnDelete(action = OnDeleteAction.CASCADE)
     public Movie movie;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JsonbTransient
     @OnDelete(action = OnDeleteAction.CASCADE)
     public Actor actor;
 
 
-    public static Multi<ActorMovieEntity> getEntityByMovieAndActor(Long movie, Long actor) {
-        return stream("movie.id = ?1 and actor.id = ?2", movie, actor);
-    }
-
-    public static Multi<ActorMovieEntity> getActorsByMovieQuery(Movie movie) {
-        return stream("#ActorMovieEntity.getByMovieId", movie.id);
+    public static Multi<ActorMovieEntity> getActorsByMovieQuery(Long movieId) {
+        return stream("#ActorMovieEntity.getByMovieId", movieId);
     }
 
     public static Multi<ActorMovieEntity> getMoviesByActorQuery(Long actorId) {

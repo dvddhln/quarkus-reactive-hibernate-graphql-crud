@@ -2,8 +2,8 @@ package boundary;
 
 import entity.Actor;
 import entity.ActorMovieEntity;
-import entity.Movie;
 import entity.dto.ActorDTO;
+import entity.dto.MovieDTO;
 import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.graphql.Description;
 import org.eclipse.microprofile.graphql.GraphQLApi;
@@ -30,9 +30,9 @@ public class ActorResource {
         return Actor.findByActorId(id).onItem().transform(ActorDTO::from);
     }
 
-    public Uni<List<Movie>> movies(@Source ActorDTO actor) {
+    public Uni<List<MovieDTO>> movies(@Source(name = "ActorResponse") ActorDTO actor) {
         return ActorMovieEntity.getMoviesByActorQuery(actor.id).onItem().transform(actorMovieEntity ->
-                actorMovieEntity.movie).collect().asList();
+                actorMovieEntity.movie).collect().asList().onItem().transform(MovieDTO::from);
     }
 
     @Mutation

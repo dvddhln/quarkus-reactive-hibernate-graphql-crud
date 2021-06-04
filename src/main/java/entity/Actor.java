@@ -68,7 +68,7 @@ public class Actor extends PanacheEntityBase {
                             return ActorMovieEntity.builder()
                                     .actor(entity.getItem1())
                                     .movie(entity.getItem2()).build();
-                            
+
                         })
                         .onItem().call(actorMovieEntity -> actorMovieEntity.persist())
                         .onItem().transform(actorMovieEntity -> actorMovieEntity.actor));

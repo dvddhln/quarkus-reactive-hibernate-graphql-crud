@@ -51,11 +51,11 @@ public class Actor extends PanacheEntityBase {
 
     public static Uni<Actor> addMovieToActor(Long movieId, Long actorId) {
 
-        Uni<Actor> movie = findById(actorId);
-        Uni<Movie> actor = Movie.findByMovieId(movieId);
+        Uni<Actor> actor = findById(actorId);
+        Uni<Movie> movie = Movie.findByMovieId(movieId);
 
         Uni<Tuple2<Actor, Movie>> movieActorUni = Uni.combine()
-                .all().unis(movie, actor).asTuple();
+                .all().unis(actor, movie).asTuple();
 
         return Panache
                 .withTransaction(() -> movieActorUni
